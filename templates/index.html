@@ -2,33 +2,44 @@
 <html>
 <head>
     <title>Milk Yield Prediction</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        .container { width: 50%; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; }
-        input { margin: 5px; padding: 10px; width: 80%; }
-        button { padding: 10px 20px; background: #28a745; color: white; border: none; cursor: pointer; }
-        button:hover { background: #218838; }
-        .result { margin-top: 20px; font-size: 20px; }
-        .suggestion { margin-top: 20px; font-size: 18px; color: #555; }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="container">
-        <h2>Milk Yield and Heat Stress Prediction</h2>
+        <h2>🐄 Milk Yield & Heat Stress Prediction</h2>
         <form action="/" method="post">
-            <input type="text" name="THI" placeholder="Temperature-Humidity Index (THI)" required><br>
-            <input type="text" name="RH" placeholder="Relative Humidity (%)" required><br>
-            <input type="text" name="Ruminating" placeholder="Ruminating Time" required><br>
-            <input type="text" name="Eating" placeholder="Eating Time" required><br>
-            <input type="text" name="Lactation" placeholder="Lactation Stage" required><br>
-            <input type="text" name="DIM" placeholder="Days in Milk (DIM)" required><br>
-            <button type="submit">Predict</button>
+            <div class="input-group">
+                <input type="text" name="THI" placeholder="🌡️ Temperature-Humidity Index (THI)" required>
+            </div>
+            <div class="input-group">
+                <input type="text" name="RH" placeholder="💧 Relative Humidity (%)" required>
+            </div>
+            <div class="input-group">
+                <input type="text" name="Ruminating" placeholder="🐮 Ruminating Time (minutes)" required>
+            </div>
+            <div class="input-group">
+                <input type="text" name="Eating" placeholder="🌾 Eating Time (minutes)" required>
+            </div>
+            <div class="input-group">
+                <input type="text" name="Lactation" placeholder="🥛 Lactation Stage (1-4)" required>
+            </div>
+            <div class="input-group">
+                <input type="text" name="DIM" placeholder="📅 Days in Milk (DIM)" required>
+            </div>
+            <button type="submit">Predict Milk Yield</button>
         </form>
+        
         {% if prediction_text %}
             <div class="result">{{ prediction_text }}</div>
             <div class="result">{{ heat_stress_text }}</div>
-            <div class="suggestion"><strong>Suggestions to Improve Milk Yield:</strong> <br>{{ milk_yield_suggestion }}</div>
-            <div class="suggestion"><strong>Suggestions for Heat Stress:</strong> {{ heat_stress_suggestion }}</div>
+            <div class="suggestion">
+                <strong>💡 Suggestions to Improve Milk Yield:</strong>
+                {{ milk_yield_suggestion }}
+            </div>
+            <div class="suggestion">
+                <strong>🌡️ Suggestions for Heat Stress Management:</strong>
+                {{ heat_stress_suggestion }}
+            </div>
         {% endif %}
     </div>
 </body>
