@@ -106,26 +106,13 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Load model and scaler
-import zipfile
-import os
-import joblib
-import streamlit as st
-
-# Load model and scaler (with zip extraction)
 @st.cache_resource
 def load_models():
-    # If models folder doesn't have the files, extract from zip
-    if not os.path.exists("models/milk_yield_model.pkl") or not os.path.exists("models/scaler.pkl"):
-        with zipfile.ZipFile("models.zip", "r") as zip_ref:
-            zip_ref.extractall("models")
-    
-    # Load the model and scaler
     model = joblib.load("models/milk_yield_model.pkl")
     scaler = joblib.load("models/scaler.pkl")
     return model, scaler
 
 model, scaler = load_models()
-
 
 def calculate_heat_stress(thi):
     """Calculate heat stress level based on THI"""
