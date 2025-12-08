@@ -105,23 +105,57 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-import zipfile
 import os
+import zipfile
 import joblib
 import streamlit as st
 
-# Load model and scaler (with zip extraction)
 @st.cache_resource
 def load_models():
-    # If models folder doesn't have the files, extract from zip
+
+    st.write("📁 Current working directory:", os.getcwd())
+    st.write("📂 Files in root:", os.listdir("."))
+
+    # Step 1: Ensure models directory exists
+    if not os.path.exists("models"):
+        os.makedirs("models")
+        st.write("✅ Created models folder")
+
+    st.write("📂 Files in models BEFORE extraction:", os.listdir("models"))
+
+    # Step 2: Extract models.zip if PKL not found
     if not os.path.exists("models/milk_yield_model.pkl") or not os.path.exists("models/scaler.pkl"):
+
+        if not os.path.exists("models.zip"):
+            st.error("❌ models.zip NOT FOUND in GitHub repo root!")
+            st.stop()
+
+        st.write("✅ models.zip found. Extracting...")
+
         with zipfile.ZipFile("models.zip", "r") as zip_ref:
             zip_ref.extractall("models")
-    
-    # Load the model and scaler
-    model = joblib.load("models/milk_yield_model.pkl")
-    scaler = joblib.load("models/scaler.pkl")
+
+    st.write("📂 Files in models AFTER extraction:", os.listdir("models"))
+
+    model_path = "models/milk_yield_model.pkl"
+    scaler_path = "models/scaler.pkl"
+
+    # Step 3: Absolute verification
+    if not os.path.exists(model_path):
+        st.error(f"❌ Model NOT found at: {model_path}")
+        st.stop()
+
+    if not os.path.exists(scaler_path):
+        st.error(f"❌ Scaler NOT found at: {scaler_path}")
+        st.stop()
+
+    # Step 4: Load safely
+    model = joblib.load(model_path)
+    scaler = joblib.load(scaler_path)
+
+    st.success("✅ Model & Scaler loaded successfully!")
     return model, scaler
+
 
 model, scaler = load_models()
 
@@ -271,3 +305,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
